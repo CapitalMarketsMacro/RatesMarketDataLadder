@@ -1,0 +1,51 @@
+<div class="window-chrome">
+  <span class="status-dot"></span>
+  <span class="title">{{ title() }}</span>
+  <span class="market-id num">· {{ data().MarketId }}</span>
+  <div class="chrome-actions">
+    <button class="chrome-btn" title="Recenter">⊕</button>
+    <button class="chrome-btn" title="Settings">⚙</button>
+  </div>
+</div>
+
+<ladder-header
+  [payload]="data()"
+  [sparkPts]="headerSparkPts()"
+  [dense]="variant() === 'pro'"
+  [instrumentLabel]="instrumentLabel()" />
+
+<div class="body-wrap">
+  <ladder-body
+    [payload]="data()"
+    [orders]="orders()"
+    [variant]="variant()"
+    [flashMap]="flashes()"
+    [sizeStep]="size()"
+    [showVAP]="showVAP()"
+    [vapMap]="vapMap()"
+    [tickSize]="tickSize()"
+    (clickBid)="onClickBid($event)"
+    (clickAsk)="onClickAsk($event)" />
+
+  @if (variant() === 'analytics') {
+    <analytics-rail [payload]="data()" [sparkPts]="sparkPts()" />
+  }
+</div>
+
+@if (variant() === 'pro') {
+  <working-strip [orders]="orders()" (cancel)="onCancel($event)" />
+}
+
+<ladder-footer
+  [payload]="data()"
+  [size]="size()"
+  (sizeChange)="size.set($event)"
+  (submitBuy)="onSubmitBuy()"
+  (submitSell)="onSubmitSell()"
+  (cancelAll)="onCancelAll()" />
+
+<div class="status-strip">
+  <span class="amps">● AMPS</span>
+  <span>rev {{ data().RevisionId }}</span>
+  <span class="utc">{{ utcClock() }} UTC</span>
+</div>

@@ -1,0 +1,47 @@
+<header class="demo-header">
+  <h1>Rates Market Data Ladder</h1>
+  <label class="ctl">
+    <input type="checkbox" [checked]="ticking()" (change)="toggleTicking($event)">
+    Live ticking
+  </label>
+  <label class="ctl">
+    <input type="checkbox" [checked]="showVAP()" (change)="toggleVAP($event)">
+    Show VAP columns
+  </label>
+  <label class="ctl">
+    Theme
+    <select [value]="theme()" (change)="setTheme($event)">
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
+    </select>
+  </label>
+</header>
+
+<main class="demo-grid">
+  <rates-ladder
+    variant="standard"
+    title="MD Trader · Standard"
+    [width]="stdWidth()"
+    [height]="720"
+    [ticking]="ticking()"
+    [theme]="theme()"
+    [showVAP]="showVAP()" />
+
+  <rates-ladder
+    variant="pro"
+    title="MD Trader · Pro"
+    [width]="proWidth()"
+    [height]="720"
+    [ticking]="ticking()"
+    [theme]="theme()"
+    [showVAP]="showVAP()" />
+
+  <rates-ladder
+    variant="analytics"
+    title="MD Trader · Analytics"
+    [width]="anaWidth()"
+    [height]="720"
+    [ticking]="ticking()"
+    [theme]="theme()"
+    [showVAP]="showVAP()" />
+</main>

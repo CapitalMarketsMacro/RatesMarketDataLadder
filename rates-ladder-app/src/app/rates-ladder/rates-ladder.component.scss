@@ -1,0 +1,68 @@
+/* Outer chrome for the ladder window — README §5.8 + Ladder.jsx outer styles */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-app);
+  color: var(--fg-1);
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+/* Window chrome — 28px title bar */
+.window-chrome {
+  height: 28px;
+  padding: 0 8px;
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-1);
+  display: flex; align-items: center; gap: 8px;
+  flex: 0 0 auto;
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--mkt-up);
+}
+.title {
+  font-size: 11px; color: var(--fg-2); font-weight: 500;
+}
+.market-id {
+  font-size: 10px; color: var(--fg-3);
+}
+.chrome-actions {
+  margin-left: auto;
+  display: flex; gap: 4px;
+}
+.chrome-btn {
+  width: 22px; height: 22px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border-2);
+  color: var(--fg-3);
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.chrome-btn:hover { background: var(--bg-elev); color: var(--fg-1); }
+
+.body-wrap {
+  flex: 1; display: flex; min-height: 0;
+}
+
+/* Status strip — README §5.8 */
+.status-strip {
+  height: 22px;
+  padding: 0 8px;
+  background: var(--bg-canvas);
+  border-top: 1px solid var(--border-1);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 10px; color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+.amps { color: var(--mkt-up); }
+.utc  { margin-left: auto; }

@@ -1,0 +1,91 @@
+/* Design tokens — Macro Rates Ladder
+   Authoritative values per design_handoff_rates_ladder/README.md §2. */
+
+:root {
+  /* surfaces */
+  --bg-app:        #0b0d10;
+  --bg-canvas:     #11151a;
+  --bg-panel:      #161b22;
+  --bg-elev:       #1c222b;
+  --bg-raised:     #1c222b;
+
+  /* foreground */
+  --fg-1:          #e6edf3;
+  --fg-2:          #b1bac4;
+  --fg-3:          #7d8590;
+
+  /* borders */
+  --border-1:      #21262d;
+  --border-2:      #30363d;
+  --border-grid:   rgba(255, 255, 255, 0.04);
+
+  /* market semantic */
+  --bid:           #3fb950;
+  --bid-bg:        rgba(63, 185, 80, 0.10);
+  --ask:           #f85149;
+  --ask-bg:        rgba(248, 81, 73, 0.10);
+  --mkt-up:        #3fb950;
+  --mkt-down:      #f85149;
+
+  /* accent */
+  --brand:         #f0b429;
+  --brand-soft:    rgba(240, 180, 41, 0.14);
+  --on-brand:      #11151a;
+  --yellow-300:    #f5c13a;
+
+  /* button base palettes (derived from semantic tokens) */
+  --btn-bid-bg:        rgba(63, 185, 80, 0.16);
+  --btn-bid-bg-hover:  rgba(63, 185, 80, 0.26);
+  --btn-bid-border:    rgba(63, 185, 80, 0.45);
+  --btn-bid-fg:        #6ee7a8;
+
+  --btn-ask-bg:        rgba(248, 81, 73, 0.16);
+  --btn-ask-bg-hover:  rgba(248, 81, 73, 0.26);
+  --btn-ask-border:    rgba(248, 81, 73, 0.45);
+  --btn-ask-fg:        #ff9a95;
+
+  /* fonts */
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* tabular numerals — critical for price column alignment */
+  --numeric-feature: "tnum" 1, "lnum" 1, "zero" 1;
+
+  /* radii */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+}
+
+/* Light theme override — applied on the .theme-light wrapper of a single ladder */
+.theme-light {
+  --bg-app:      #ffffff;
+  --bg-canvas:   #f7f8fa;
+  --bg-panel:    #ffffff;
+  --bg-elev:     #f1f3f5;
+  --bg-raised:   #f1f3f5;
+
+  --fg-1:        #0d1117;
+  --fg-2:        #4b5563;
+  --fg-3:        #6b7280;
+
+  --border-1:    #e5e7eb;
+  --border-2:    #d1d5db;
+  --border-grid: rgba(0, 0, 0, 0.04);
+
+  --bid-bg:      rgba(63, 185, 80, 0.12);
+  --ask-bg:      rgba(248, 81, 73, 0.12);
+
+  --on-brand:    #11151a;
+
+  --btn-bid-bg:        rgba(63, 185, 80, 0.14);
+  --btn-bid-bg-hover:  rgba(63, 185, 80, 0.24);
+  --btn-bid-border:    rgba(63, 185, 80, 0.45);
+  --btn-bid-fg:        #0a5c32;
+
+  --btn-ask-bg:        rgba(248, 81, 73, 0.14);
+  --btn-ask-bg-hover:  rgba(248, 81, 73, 0.24);
+  --btn-ask-border:    rgba(248, 81, 73, 0.45);
+  --btn-ask-fg:        #861e19;
+}

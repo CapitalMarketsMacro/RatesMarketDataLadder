@@ -1,0 +1,17 @@
+@use 'styles/tokens';
+@use 'styles/reset';
+@use 'styles/typography';
+
+/* Cell flash animation tokens — README §2.4 */
+@keyframes flash-up {
+  0%   { background: rgba(63, 185, 80, 0.30); }
+  100% { background: transparent; }
+}
+
+@keyframes flash-down {
+  0%   { background: rgba(248, 81, 73, 0.30); }
+  100% { background: transparent; }
+}
+
+.flash-up   { animation: flash-up   600ms ease-out; }
+.flash-down { animation: flash-down 600ms ease-out; }

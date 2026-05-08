@@ -1,0 +1,23 @@
+/* Typography utility classes — per README §2.3 */
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.num,
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: var(--numeric-feature);
+  font-variant-numeric: tabular-nums;
+}
+
+.muted { color: var(--fg-3); }
+.up    { color: var(--mkt-up); }
+.down  { color: var(--mkt-down); }
+.bid   { color: var(--bid); }
+.ask   { color: var(--ask); }

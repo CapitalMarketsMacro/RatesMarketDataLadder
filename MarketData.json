@@ -1,0 +1,52 @@
+{
+    "Id": 61711541,
+    "MarketId": 35,
+    "UnderlyingMarketId": 35,
+    "DV01": 779.6588375724411,
+    "Time": 1778261401498,
+    "LastTradePrice": 98.125,
+    "LastTradeSize": 1.0,
+    "LastTradeSource": 17,
+    "LastTradeTime": 1778261401276,
+    "LastTradeSide": "BUY",
+    "HighTradePrice": 98.265625,
+    "LowTradePrice": 97.890625,
+    "RefPrice": 98.1318359375,
+    "RevisionId": 52244773,
+    "RevisionTime": 0,
+    "BidSubTickQuantity": 0.0,
+    "AskSubTickQuantity": 0.0,
+    "BidPricesUsed": 3,
+    "BidYield": 0.04362150857266394,
+    "Bid": [
+        {
+            "Price": 98.125,
+            "Qty": 18.0,
+            "Source": [],
+            "Status": 0
+        },
+        {
+            "Price": 98.109375,
+            "Qty": 337.0
+        },
+        {
+            "Price": 98.09375,
+            "Qty": 87.0
+        }
+    ],
+    "AskPricesUsed": 2,
+    "AskYield": 0.04360146964130807,
+    "Ask": [
+        {
+            "Price": 98.140625,
+            "Qty": 313.0,
+            "Source": [],
+            "Status": 0
+        },
+        {
+            "Price": 98.15625,
+            "Qty": 245.0
+        }
+    ],
+    "ProductGroup": 10
+}
