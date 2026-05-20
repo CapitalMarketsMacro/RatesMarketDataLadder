@@ -12,6 +12,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 import { MarketDataService } from './market-data.service';
 import { VapService } from './vap.service';
+import { AmpsService } from './amps.service';
 import type {
   LadderVariant,
   MarketData,
@@ -68,6 +69,7 @@ export class RatesLadderComponent {
   // ── injected services ────────────────────────────────────────────────
   private readonly mds = inject(MarketDataService);
   private readonly vap = inject(VapService);
+  protected readonly amps = inject(AmpsService);
 
   // ── reactive state ───────────────────────────────────────────────────
   readonly data    = toSignal(this.mds.data$, { requireSync: true });

@@ -1,5 +1,5 @@
 <div class="window-chrome">
-  <span class="status-dot"></span>
+  <span class="status-dot" [class.live]="amps.connected()" [class.down]="amps.state() === 'error'"></span>
   <span class="title">{{ title() }}</span>
   <span class="market-id num">· {{ data().MarketId }}</span>
   <div class="chrome-actions">
@@ -45,7 +45,9 @@
   (cancelAll)="onCancelAll()" />
 
 <div class="status-strip">
-  <span class="amps">● AMPS</span>
+  <span class="amps" [class.live]="amps.connected()" [class.down]="amps.state() === 'error'">
+    ● AMPS {{ amps.connected() ? 'live' : amps.state() }}
+  </span>
   <span>rev {{ data().RevisionId }}</span>
   <span class="utc">{{ utcClock() }} UTC</span>
 </div>

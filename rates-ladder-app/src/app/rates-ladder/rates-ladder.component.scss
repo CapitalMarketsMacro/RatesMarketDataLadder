@@ -23,8 +23,10 @@
 }
 .status-dot {
   width: 6px; height: 6px; border-radius: 999px;
-  background: var(--mkt-up);
+  background: var(--fg-3);
 }
+.status-dot.live { background: var(--mkt-up); }
+.status-dot.down { background: var(--mkt-down); }
 .title {
   font-size: 11px; color: var(--fg-2); font-weight: 500;
 }
@@ -64,5 +66,7 @@
   font-variant-numeric: tabular-nums;
   flex: 0 0 auto;
 }
-.amps { color: var(--mkt-up); }
+.amps { color: var(--fg-3); }
+.amps.live { color: var(--mkt-up); }
+.amps.down { color: var(--mkt-down); }
 .utc  { margin-left: auto; }

@@ -17,6 +17,7 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "amps": "^5.3.4-0.378635.60b2fcc",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

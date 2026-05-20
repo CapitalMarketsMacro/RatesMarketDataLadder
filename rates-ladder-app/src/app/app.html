@@ -1,8 +1,22 @@
 <header class="demo-header">
   <h1>Rates Market Data Ladder</h1>
+
+  <label class="ctl">
+    Data
+    <select [value]="dataSource()" (change)="setDataSource($event)">
+      <option value="amps">AMPS Live</option>
+      <option value="simulator">Simulator</option>
+    </select>
+  </label>
+
+  <span class="amps-badge" [class.ok]="amps.connected()" [class.err]="amps.state() === 'error'"
+        [title]="ampsUrl + '  ·  ' + (amps.lastError() ?? '')">
+    {{ ampsBadge() }}
+  </span>
+
   <label class="ctl">
     <input type="checkbox" [checked]="ticking()" (change)="toggleTicking($event)">
-    Live ticking
+    Live ticking (sim)
   </label>
   <label class="ctl">
     <input type="checkbox" [checked]="showVAP()" (change)="toggleVAP($event)">

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import type { LastTradeEvent, MarketData, VapPrint } from './rates-ladder.types';
 import { VapService } from './vap.service';
+import { AmpsService, type AmpsConnectOptions } from './amps.service';
 
 /** Seed payload — README §4.3, mirrors design_reference/Ladder.jsx PAYLOAD. */
 const SEED: MarketData = {
@@ -28,9 +29,12 @@ const SEED: MarketData = {
   ProductGroup: 10,
 };
 
+export type DataSource = 'simulator' | 'amps';
+
 @Injectable({ providedIn: 'root' })
 export class MarketDataService {
-  private readonly vap = inject(VapService);
+  private readonly vap  = inject(VapService);
+  private readonly amps = inject(AmpsService);
 
   private readonly _data$ = new BehaviorSubject<MarketData>(SEED);
   readonly data$ = this._data$.asObservable();
@@ -41,17 +45,27 @@ export class MarketDataService {
   /** New last-trade prints — components can drive sparkline buffers off this. */
   readonly lastTrade$ = new Subject<LastTradeEvent>();
 
+  private mode: DataSource = 'simulator';
   private tickRefCount = 0;
   private tickHandle: ReturnType<typeof setInterval> | null = null;
   private flashTimers = new Map<string, ReturnType<typeof setTimeout>>();
+  private ampsSub: Subscription | null = null;
+  private priorBid = new Map<string, number>();
+  private priorAsk = new Map<string, number>();
+  private priorLastPx = SEED.LastTradePrice;
 
   constructor() {
     // Seed VAP off the seed last-trade so the column isn't empty before any prints.
     this.vap.seedSynthetic(SEED.LastTradePrice, 1 / 64);
+    this.seedPriorBookFrom(SEED);
   }
 
-  /** Reference-counted: start one interval no matter how many subscribers; stop when all unsubscribe. */
+  /** Reference-counted: start one interval no matter how many subscribers; stop when all unsubscribe.
+   *  No-op while in AMPS mode — real ticks come from the wire. */
   startTickSimulation(intervalMs = 1100): Subscription {
+    if (this.mode === 'amps') {
+      return new Subscription();
+    }
     this.tickRefCount++;
     if (this.tickRefCount === 1) {
       this.tickHandle = setInterval(() => this.tick(), intervalMs);
@@ -73,23 +87,108 @@ export class MarketDataService {
     this.tickRefCount = 0;
   }
 
-  /** Real wiring (§7) lives here. Stubbed for v1. */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  connect(_wsUrl: string, _topic: string, _marketId: number): void {
-    // intentionally stubbed; replace _data$.next on each AMPS message
+  /** Switch to real AMPS feed. Subscribes to rates_market_data and rates_vap. */
+  async useAmps(opts: AmpsConnectOptions): Promise<void> {
+    this.stopTickSimulation();
+    this.tearDownAmpsSub();
+    this.mode = 'amps';
+
+    const sub = new Subscription();
+    sub.add(this.amps.marketData$.subscribe((d) => this.absorbAmpsMarketData(d)));
+    sub.add(this.amps.vapPrint$.subscribe((p) => this.vap.applyPrint(p)));
+    this.ampsSub = sub;
+
+    try {
+      await this.amps.connect(opts);
+    } catch (err) {
+      // Connection failed: stay in 'amps' mode so UI can show the error,
+      // but tear down the empty subscription wiring.
+      console.error('[MarketDataService] AMPS connect failed:', err);
+    }
   }
 
-  // ── tick body — README §4.4, ported from Ladder.jsx ────────────────────
+  /** Revert to the local tick simulator and disconnect AMPS. */
+  async useSimulator(): Promise<void> {
+    this.tearDownAmpsSub();
+    await this.amps.disconnect();
+    this.mode = 'simulator';
+    // Optionally reset prior book so the next live switch starts clean.
+    this.priorBid.clear();
+    this.priorAsk.clear();
+    this.seedPriorBookFrom(this._data$.value);
+  }
+
+  getDataSource(): DataSource {
+    return this.mode;
+  }
+
+  // ── AMPS message absorption ──────────────────────────────────────────
+  private absorbAmpsMarketData(d: MarketData): void {
+    if (!Array.isArray(d.Bid) || !Array.isArray(d.Ask)) return;
+
+    const newBid = new Map<string, number>();
+    for (const lvl of d.Bid) newBid.set(lvl.Price.toFixed(8), lvl.Qty);
+    const newAsk = new Map<string, number>();
+    for (const lvl of d.Ask) newAsk.set(lvl.Price.toFixed(8), lvl.Qty);
+
+    for (const [k, q] of newBid) {
+      const prev = this.priorBid.get(k);
+      if (prev != null && prev !== q) {
+        this.emitFlash(k, q > prev ? 'up' : 'down');
+      }
+    }
+    for (const [k, q] of newAsk) {
+      const prev = this.priorAsk.get(k);
+      if (prev != null && prev !== q) {
+        this.emitFlash(k, q > prev ? 'up' : 'down');
+      }
+    }
+    this.priorBid = newBid;
+    this.priorAsk = newAsk;
+
+    if (typeof d.LastTradePrice === 'number' && d.LastTradePrice !== this.priorLastPx) {
+      this.lastTrade$.next({
+        price: d.LastTradePrice,
+        side:  d.LastTradeSide,
+        size:  d.LastTradeSize,
+        time:  d.LastTradeTime,
+      });
+      this.priorLastPx = d.LastTradePrice;
+    }
+
+    this._data$.next(d);
+  }
+
+  private seedPriorBookFrom(d: MarketData): void {
+    for (const lvl of d.Bid) this.priorBid.set(lvl.Price.toFixed(8), lvl.Qty);
+    for (const lvl of d.Ask) this.priorAsk.set(lvl.Price.toFixed(8), lvl.Qty);
+    this.priorLastPx = d.LastTradePrice;
+  }
+
+  private emitFlash(key: string, dir: 'up' | 'down'): void {
+    this.flash$.next({ key, dir });
+    const prevTimer = this.flashTimers.get(key);
+    if (prevTimer) clearTimeout(prevTimer);
+    const t = setTimeout(() => this.flashTimers.delete(key), 600);
+    this.flashTimers.set(key, t);
+  }
+
+  private tearDownAmpsSub(): void {
+    if (this.ampsSub) {
+      this.ampsSub.unsubscribe();
+      this.ampsSub = null;
+    }
+  }
+
+  // ── simulator tick body — README §4.4, ported from Ladder.jsx ───────
   private tick(): void {
     const prev = this._data$.value;
-    // Deep-clone the bid/ask arrays so OnPush + zoneless detect a new reference.
     const next: MarketData = {
       ...prev,
       Bid: prev.Bid.map(b => ({ ...b })),
       Ask: prev.Ask.map(a => ({ ...a })),
     };
 
-    // 60%: wiggle a random level qty
     if (Math.random() < 0.6) {
       const onBid = Math.random() < 0.5;
       const arr = onBid ? next.Bid : next.Ask;
@@ -98,21 +197,10 @@ export class MarketDataService {
         const delta = (Math.random() < 0.5 ? -1 : 1) * Math.max(1, Math.round(Math.random() * 20));
         const lvl = arr[idx];
         lvl.Qty = Math.max(1, lvl.Qty + delta);
-        const key = lvl.Price.toFixed(8);
-        const dir: 'up' | 'down' = delta > 0 ? 'up' : 'down';
-        this.flash$.next({ key, dir });
-
-        // auto-clear flash 600ms later (matches the @keyframes duration)
-        const prevTimer = this.flashTimers.get(key);
-        if (prevTimer) clearTimeout(prevTimer);
-        const t = setTimeout(() => {
-          this.flashTimers.delete(key);
-        }, 600);
-        this.flashTimers.set(key, t);
+        this.emitFlash(lvl.Price.toFixed(8), delta > 0 ? 'up' : 'down');
       }
     }
 
-    // 18%: print a new last trade at best bid or best ask
     if (Math.random() < 0.18) {
       const useBid = Math.random() < 0.5;
       const lvl = useBid ? next.Bid[0] : next.Ask[0];
@@ -125,7 +213,6 @@ export class MarketDataService {
         next.LastTradeSize = size;
         next.LastTradeTime = time;
 
-        // Synthetic VapPrint (§4.4 / matches inline tick logic in Ladder.jsx)
         const print: VapPrint = {
           Id: next.Id,
           ECN: 0,

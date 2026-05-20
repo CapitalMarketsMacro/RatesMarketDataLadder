@@ -38,6 +38,19 @@
 }
 .ctl select:focus { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand-soft); }
 
+.amps-badge {
+  font: 500 11px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-3);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-2);
+  background: var(--bg-elev);
+  white-space: nowrap;
+}
+.amps-badge.ok  { color: var(--bid); border-color: rgba(63,185,80,0.35); }
+.amps-badge.err { color: var(--ask); border-color: rgba(248,81,73,0.45); }
+
 .demo-grid {
   display: flex;
   gap: 24px;
