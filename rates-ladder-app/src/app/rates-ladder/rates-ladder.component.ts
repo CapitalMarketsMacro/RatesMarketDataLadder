@@ -13,6 +13,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MarketDataService } from './market-data.service';
 import { VapService } from './vap.service';
 import { AmpsService } from './amps.service';
+import { ProductService } from './product.service';
 import type {
   LadderVariant,
   MarketData,
@@ -70,6 +71,20 @@ export class RatesLadderComponent {
   private readonly mds = inject(MarketDataService);
   private readonly vap = inject(VapService);
   protected readonly amps = inject(AmpsService);
+  protected readonly prod = inject(ProductService);
+
+  /** Label shown in the header strip — falls back to the static input
+   *  when no AMPS product is selected (simulator or pre-arrival). */
+  readonly displayLabel = computed(() => {
+    const p = this.prod.selected();
+    return p ? `${p.Desc} · ${p.LongDesc}` : this.instrumentLabel();
+  });
+
+  /** Effective tick size — defers to the selected product when available. */
+  readonly effectiveTick = computed(() => {
+    const p = this.prod.selected();
+    return p?.TickSize ?? this.tickSize();
+  });
 
   // ── reactive state ───────────────────────────────────────────────────
   readonly data    = toSignal(this.mds.data$, { requireSync: true });

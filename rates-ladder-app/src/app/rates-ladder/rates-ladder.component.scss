@@ -33,6 +33,14 @@
 .market-id {
   font-size: 10px; color: var(--fg-3);
 }
+.product-chip {
+  font-size: 10px;
+  color: var(--fg-2);
+  padding: 1px 5px;
+  border: 1px solid var(--border-1);
+  border-radius: 3px;
+  background: var(--bg-elev);
+}
 .chrome-actions {
   margin-left: auto;
   display: flex; gap: 4px;

@@ -1,0 +1,137 @@
+update instructions based on below info :
+Angular CLI       : 21.2.9
+Node.js           : 22.15.0
+Package Manager   : npm 11.12.1
+Updated for your toolchain — Angular 21.2.9 / Node 22.15 / npm 11.12. Key changes: §1 now uses ng new without --standalone (default in 21), zoneless change detection, signal-input API alternative, and @if/@for control flow throughout. Re-download from the card above.
+
+Save as standalone HTML: Market Data Ladder.html
+Save as standalone HTML
+Single 3.3 MB file — works fully offline.
+
+Parse in detail the JSON from image . It is product JSON for 10Year OTR
+product.jpg
+{
+    "Id": 63211397,
+    "Desc": "10Y",
+    "LongDesc": "10Y - UST 4.375 05/15/2036",
+    "AssetType": 7,
+    "AssetSubType": 4,
+    "StrategyType": 1,
+    "PriceType": 1,
+    "Coupon": 4.375,
+    "Currency": 171,
+    "Notional": 1000000,
+    "MaturityDate": 2094436800000,
+    "Tenor": 10,
+    "previousClosePrice": 0,
+    "TickSize": 0.015625,
+    "MinQty": 1,
+    "isTradable": true,
+    "contractSequence": 0,
+    "IsOTR": true,
+    "IsWI": false,
+    "AuctionDate": 0,
+    "IssueDate": 0,
+    "ReissueDate": 0,
+    "IsRI": false,
+    "TenorId": 0,
+    "Alias": "91282CQQ7",
+    "AliasType": 3,
+    "ECNInfoList": [
+        {
+            "ECN": 90,
+            "ECNProductId": "GX2-10_YEAR",
+            "MinInc": 0.00390625,
+            "MinQty": 1
+        },
+        {
+            "ECN": 166,
+            "ECNProductId": "T_US10Y",
+            "MinInc": 0.00390625,
+            "MinQty": 1
+        },
+        {
+            "ECN": 17,
+            "ECNProductId": "10_YEAR",
+            "MinInc": 0.015625,
+            "MinQty": 1
+        },
+        {
+            "ECN": 31,
+            "ECNProductId": "10Y",
+            "MinInc": 0.00390625,
+            "MinQty": 0.001
+        },
+        {
+            "ECN": 18,
+            "ECNProductId": "10Y_UST",
+            "MinInc": 0.0078125,
+            "MinQty": 1
+        },
+        {
+            "ECN": 93,
+            "ECNProductId": "T_US10Y",
+            "MinInc": 0.00390625,
+            "MinQty": 1
+        },
+        {
+            "ECN": 30,
+            "ECNProductId": "US10Y",
+            "MinInc": 0.00390625,
+            "MinQty": 0.1
+        },
+        {
+            "ECN": 73,
+            "ECNProductId": "US10YT",
+            "MinInc": 0.00390625,
+            "MinQty": 0.01
+        },
+        {
+            "ECN": 91,
+            "ECNProductId": "US10Y",
+            "MinInc": 0.015625,
+            "MinQty": 1
+        },
+        {
+            "ECN": 229,
+            "ECNProductId": "T_US10Y",
+            "MinInc": 0.00390625,
+            "MinQty": 1
+        },
+        {
+            "ECN": 256,
+            "ECNProductId": "91282CQQ7",
+            "MinInc": 0.00390625,
+            "MinQty": 0.001
+        },
+        {
+            "ECN": 257,
+            "ECNProductId": "91282CQQ7",
+            "MinInc": 0.00390625,
+            "MinQty": 0.001
+        },
+        {
+            "ECN": 258,
+            "ECNProductId": "91282CQQ7",
+            "MinInc": 0.00390625,
+            "MinQty": 0.001
+        },
+        {
+            "ECN": 331,
+            "ECNProductId": "91282CQQ7",
+            "MinInc": 0.00390625,
+            "MinQty": 0.001
+        },
+        {
+            "ECN": 35,
+            "ECNProductId": "63211397",
+            "MinInc": 0.015625,
+            "MinQty": 1
+        }
+    ],
+    "Liquidity": 1,
+    "Active": true,
+    "ProductGroup": 10,
+    "ReplacedEntry": false,
+    "SortKey": "0010|10.0|20960515|63211397"
+}

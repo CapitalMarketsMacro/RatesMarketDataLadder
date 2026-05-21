@@ -87,7 +87,8 @@ export class MarketDataService {
     this.tickRefCount = 0;
   }
 
-  /** Switch to real AMPS feed. Subscribes to rates_market_data and rates_vap. */
+  /** Switch to real AMPS feed. Connects + subscribes to products; the
+   *  per-product market_data/vap subscriptions are placed by setProduct. */
   async useAmps(opts: AmpsConnectOptions): Promise<void> {
     this.stopTickSimulation();
     this.tearDownAmpsSub();
@@ -105,6 +106,14 @@ export class MarketDataService {
       // but tear down the empty subscription wiring.
       console.error('[MarketDataService] AMPS connect failed:', err);
     }
+  }
+
+  /** Clear prior book / VAP buffers when swapping product so the next
+   *  diff doesn't flash leftover levels from the previous instrument. */
+  resetForProductSwap(): void {
+    this.priorBid.clear();
+    this.priorAsk.clear();
+    this.vap.clear();
   }
 
   /** Revert to the local tick simulator and disconnect AMPS. */

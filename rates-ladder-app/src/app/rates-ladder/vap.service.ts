@@ -8,6 +8,11 @@ export class VapService {
   private readonly _vapMap$ = new BehaviorSubject<Map<string, VapEntry>>(new Map());
   readonly vapMap$ = this._vapMap$.asObservable();
 
+  /** Wipe the VAP map — used when switching products to drop stale prints. */
+  clear(): void {
+    this._vapMap$.next(new Map());
+  }
+
   /** Apply one AMPS clobVAP print, accumulating into the per-price entry. */
   applyPrint(p: VapPrint): void {
     const key = p.TradePrice.toFixed(8);

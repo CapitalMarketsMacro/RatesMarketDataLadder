@@ -38,6 +38,39 @@
 }
 .ctl select:focus { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand-soft); }
 
+.product-picker {
+  align-items: center;
+  gap: 8px;
+}
+.product-picker input[type="text"] {
+  background: var(--bg-app);
+  color: var(--fg-1);
+  border: 1px solid var(--border-2);
+  border-radius: 3px;
+  padding: 4px 8px;
+  font: 500 12px var(--font-sans);
+  outline: none;
+  width: 110px;
+}
+.product-picker input[type="text"]:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--brand-soft);
+}
+.product-picker input[type="text"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.product-meta {
+  font: 500 11px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-2);
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.product-meta.muted { color: var(--fg-3); }
+
 .amps-badge {
   font: 500 11px var(--font-mono);
   font-variant-numeric: tabular-nums;

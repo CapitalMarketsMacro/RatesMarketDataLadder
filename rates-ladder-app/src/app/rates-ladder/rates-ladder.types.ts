@@ -88,3 +88,48 @@ export interface LastTradeEvent {
   size: number;
   time: number;
 }
+
+/** Per-ECN trading info embedded in a Product — mirrors AMPS Product schema. */
+export interface ECNInfo {
+  ECN: number;
+  ECNProductId: string;
+  MinInc: number;
+  MinQty: number;
+}
+
+/** Product reference data — schema from AMPS `products` topic (~/Product.json).
+ *  Keyed on /Id. On-the-run filter is /IsOTR. */
+export interface Product {
+  Id: number;
+  Desc: string;
+  LongDesc: string;
+  AssetType: number;
+  AssetSubType: number;
+  StrategyType: number;
+  PriceType: number;
+  Coupon: number;
+  Currency: number;
+  Notional: number;
+  MaturityDate: number;
+  Tenor: number;
+  previousClosePrice: number;
+  TickSize: number;
+  MinQty: number;
+  isTradable: boolean;
+  contractSequence: number;
+  IsOTR: boolean;
+  IsWI: boolean;
+  AuctionDate: number;
+  IssueDate: number;
+  ReissueDate: number;
+  IsRI: boolean;
+  TenorId: number;
+  Alias: string;
+  AliasType: number;
+  ECNInfoList: ECNInfo[];
+  Liquidity: number;
+  Active: boolean;
+  ProductGroup: number;
+  ReplacedEntry: boolean;
+  SortKey: string;
+}

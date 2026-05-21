@@ -9,6 +9,26 @@
     </select>
   </label>
 
+  <label class="ctl product-picker">
+    Product
+    <input type="text"
+           list="products-list"
+           [value]="productFilter() || prod.selected()?.Desc || ''"
+           (input)="onProductInput($event)"
+           placeholder="2Y, 5Y, 10Y…"
+           [disabled]="prod.products().length === 0" />
+    <datalist id="products-list">
+      @for (p of filteredProducts(); track p.Id) {
+        <option [value]="p.Desc">{{ p.LongDesc }}</option>
+      }
+    </datalist>
+    @if (prod.selected(); as sp) {
+      <span class="product-meta" [title]="sp.LongDesc">{{ sp.LongDesc }}</span>
+    } @else if (prod.products().length === 0) {
+      <span class="product-meta muted">awaiting products…</span>
+    }
+  </label>
+
   <span class="amps-badge" [class.ok]="amps.connected()" [class.err]="amps.state() === 'error'"
         [title]="ampsUrl + '  ·  ' + (amps.lastError() ?? '')">
     {{ ampsBadge() }}
